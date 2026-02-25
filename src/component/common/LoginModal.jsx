@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 const loginService = new LoginApiService();
 
-function LoginModal({ onClose,onLogin }) {
+function LoginModal({ onClose , onLogin}) {
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -45,9 +45,12 @@ function LoginModal({ onClose,onLogin }) {
       const response = await loginService.verifyOTP({
       email: formData.emailOrPhone,
       otp: formData.verificationCode});
-      if(response.data.success) {
+      // console.log("ddddddddddddddddddd",response);
+      onLogin(response.data.response);
+      
+      if(response.success) {
         toast.success("Login successful!");
-        onLogin(response.data)
+        // onLogin(response.data)
       }
     } else {
       toast.error("please enter the verification code");
