@@ -2,13 +2,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoLocation } from "react-icons/io5";
-import { FaBars, FaTimes, FaUserCircle, FaHeart, FaBuilding, FaHome, FaChartLine, } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle, FaHeart, FaBuilding, FaHome, FaChartLine } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import LoginModal from "./LoginModal";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
-
 
 const Navbar = () => {
   const router = useRouter();
@@ -71,25 +70,23 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = (userData) => {
-    console.log("ddddddddddddddxxxxxxxxxx",userData);
-    
     setUser(userData);
     setShowLogin(false);
   };
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem('token');
-      localStorage.removeItem('id');
-      localStorage.removeItem('email');
-      localStorage.removeItem('name');
+      localStorage.removeItem("token");
+      localStorage.removeItem("id");
+      localStorage.removeItem("email");
+      localStorage.removeItem("name");
       setUser(null);
       setProfileOpen(false);
       router.replace("/");
       toast.success("Logged out successfully!");
     } catch (error) {
       console.error("Error clearing localStorage:", error);
-    };
+    }
   };
 
   return (
@@ -106,7 +103,6 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Menu */}
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-10 font-medium relative">
             {Object.keys(menuData).map((menu) => (
               <div
@@ -115,68 +111,38 @@ const Navbar = () => {
                 onMouseEnter={() => setActiveMenu(menu)}
                 onMouseLeave={() => setActiveMenu(null)}
               >
-                {/* Button */}
                 <button className="relative flex items-center gap-1 group py-2">
                   {menu}
                   <RiArrowDropDownLine size={20} />
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </button>
 
-                {/* Dropdown */}
                 {activeMenu === menu && (
                   <div className="absolute left-0 top-full pt-4">
-
-                    {/* Invisible hover bridge */}
                     <div className="absolute -top-4 left-0 w-full h-4"></div>
-
                     <div className="w-[600px] bg-white shadow-2xl rounded-3xl p-8 grid grid-cols-2 gap-8 border transition-all duration-200">
-
-                      {/* Property Types */}
                       <div>
-                        <h3 className="font-semibold text-gray-800 mb-4 text-lg">
-                          Property Types
-                        </h3>
+                        <h3 className="font-semibold text-gray-800 mb-4 text-lg">Property Types</h3>
                         <div className="space-y-3">
                           {menuData[menu].types.map((item, i) => (
-                            <Link
-                              key={i}
-                              href={item.link}
-                              className="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 transition group"
-                            >
-                              <span className="text-blue-600 text-lg">
-                                {item.icon}
-                              </span>
-                              <span className="group-hover:text-blue-600">
-                                {item.name}
-                              </span>
+                            <Link key={i} href={item.link} className="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 transition group">
+                              <span className="text-blue-600 text-lg">{item.icon}</span>
+                              <span className="group-hover:text-blue-600">{item.name}</span>
                             </Link>
                           ))}
                         </div>
                       </div>
-
-                      {/* Features */}
                       <div>
-                        <h3 className="font-semibold text-gray-800 mb-4 text-lg">
-                          Popular Searches
-                        </h3>
+                        <h3 className="font-semibold text-gray-800 mb-4 text-lg">Popular Searches</h3>
                         <div className="space-y-3">
                           {menuData[menu].features.map((item, i) => (
-                            <Link
-                              key={i}
-                              href={item.link}
-                              className="flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-50 transition group"
-                            >
-                              <span className="text-indigo-600 text-lg">
-                                {item.icon}
-                              </span>
-                              <span className="group-hover:text-indigo-600">
-                                {item.name}
-                              </span>
+                            <Link key={i} href={item.link} className="flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-50 transition group">
+                              <span className="text-indigo-600 text-lg">{item.icon}</span>
+                              <span className="group-hover:text-indigo-600">{item.name}</span>
                             </Link>
                           ))}
                         </div>
                       </div>
-
                     </div>
                   </div>
                 )}
@@ -184,15 +150,10 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Right Section */}
+          {/* Right Section (Desktop) */}
           <div className="hidden md:flex items-center gap-5">
-
-            {/* Location */}
             <div ref={locRef} className="relative">
-              <button
-                onClick={() => setLocOpen(!isLocOpen)}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition shadow-sm"
-              >
+              <button onClick={() => setLocOpen(!isLocOpen)} className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition shadow-sm">
                 <IoLocation className="text-blue-600" />
                 <span className="text-sm font-medium">{selectedLoc}</span>
                 <RiArrowDropDownLine size={20} />
@@ -201,13 +162,7 @@ const Navbar = () => {
               {isLocOpen && (
                 <div className="absolute top-12 left-0 bg-white shadow-xl rounded-2xl p-3 w-48 border">
                   {locations.map((loc, i) => (
-                    <div
-                      key={i}
-                      onClick={() => { setSelectedLoc(loc); setLocOpen(false); }}
-                      className="p-2 text-sm hover:bg-blue-50 rounded-lg cursor-pointer transition"
-                    >
-                      {loc}
-                    </div>
+                    <div key={i} onClick={() => { setSelectedLoc(loc); setLocOpen(false); }} className="p-2 text-sm hover:bg-blue-50 rounded-lg cursor-pointer transition">{loc}</div>
                   ))}
                 </div>
               )}
@@ -217,40 +172,25 @@ const Navbar = () => {
 
             {/* Profile */}
             <div ref={profileRef} className="relative">
-              <button
-                onClick={() => setProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-1 hover:text-blue-600 transition"
-              >
+              <button onClick={() => setProfileOpen(!isProfileOpen)} className="flex items-center gap-1 hover:text-blue-600 transition">
                 <FaUserCircle size={24} />
-                {/* {localStorage.getItem("name") || "user"} */}
                 <RiArrowDropDownLine size={20} />
               </button>
 
               {isProfileOpen && (
-                <div className="absolute right-0 mt-3 w-44 bg-white shadow-xl rounded-2xl p-2 border">
-                  {!user ? (
-                    <button
-                      onClick={() => { setShowLogin(true); setProfileOpen(false); }}
-                      className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded"
-                    >
-                      Login
-                    </button>
-                  ) : (
-                    <>
-                      <p className="p-2 text-sm font-medium">{user.name}</p>
-                      <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded"
-                      >
-                        Logout
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
+                  <div className="absolute right-0 mt-3 w-44 bg-white shadow-xl rounded-2xl p-2 border z-50">
+                    {!user ? (
+                      <button onClick={() => { setShowLogin(true); setProfileOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
+                    ) : (
+                      <>
+                        <p className="p-2 text-sm font-medium">{user.name}</p>
+                        <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
+                        <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
+                      </>
+                    )}
+                  </div>
+                )}
             </div>
-
           </div>
 
           {/* Mobile Toggle */}
@@ -261,13 +201,41 @@ const Navbar = () => {
           </div>
 
         </div>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div className="md:hidden bg-white shadow-lg border-t border-gray-200 p-6 space-y-4">
+            {Object.keys(menuData).map((menu) => (
+              <div key={menu}>
+                <p className="font-semibold mb-2">{menu}</p>
+                <div className="pl-2 space-y-1">
+                  {menuData[menu].types.concat(menuData[menu].features).map((item, i) => (
+                    <Link key={i} href={item.link} className="block p-2 rounded hover:bg-blue-50 transition">{item.name}</Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {/* Profile in mobile */}
+            <div className="border-t pt-4">
+              {!user ? (
+                <button onClick={() => { setShowLogin(true); setIsOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
+              ) : (
+                <>
+                  <p className="p-2 text-sm font-medium">{user.name}</p>
+                  <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
+                  <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
       </nav>
 
       <div className="h-16"></div>
 
-      {showLogin && (
-        <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} />
-      )}
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} />}
       <ToastContainer />
     </>
   );

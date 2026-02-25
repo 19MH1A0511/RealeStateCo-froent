@@ -1,9 +1,8 @@
 "use client";
-import React, { useState,useEffect } from "react";
-import { FaUpload } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaUpload, FaTimes } from "react-icons/fa";
 
 function SellPropertyPage() {
- 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,6 +13,7 @@ function SellPropertyPage() {
     price: "",
     description: "",
     images: [],
+    documents: [],
   });
 
   const [previewImages, setPreviewImages] = useState([]);
@@ -23,11 +23,43 @@ function SellPropertyPage() {
 
     if (files) {
       const fileArray = Array.from(files);
-      setFormData({ ...formData, images: fileArray });
-      setPreviewImages(fileArray.map((file) => URL.createObjectURL(file)));
+
+      if (name === "images") {
+        const newImages = [...formData.images, ...fileArray];
+        setFormData({ ...formData, images: newImages });
+
+        const previews = fileArray.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setPreviewImages((prev) => [...prev, ...previews]);
+      }
+
+      if (name === "documents") {
+        const newDocs = [...formData.documents, ...fileArray];
+        setFormData({ ...formData, documents: newDocs });
+      }
     } else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  const removeImage = (index) => {
+    const updatedImages = [...formData.images];
+    const updatedPreviews = [...previewImages];
+
+    URL.revokeObjectURL(updatedPreviews[index]);
+
+    updatedImages.splice(index, 1);
+    updatedPreviews.splice(index, 1);
+
+    setFormData({ ...formData, images: updatedImages });
+    setPreviewImages(updatedPreviews);
+  };
+
+  const removeDocument = (index) => {
+    const updatedDocs = [...formData.documents];
+    updatedDocs.splice(index, 1);
+    setFormData({ ...formData, documents: updatedDocs });
   };
 
   const handleSubmit = (e) => {
@@ -36,24 +68,18 @@ function SellPropertyPage() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-100 py-16 px-6 flex justify-center items-start">
+    <section className="min-h-screen bg-gray-100 py-16 px-6 flex justify-center">
       <div className="w-full max-w-4xl">
-
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-semibold text-gray-800">
             Sell Your Property
           </h1>
-          <p className="text-gray-500 mt-3">
-            Fill in the details below to list your property
-          </p>
         </div>
 
-        {/* Form Container */}
         <div className="bg-white p-10 rounded-2xl shadow-md border border-gray-200">
-
           <form onSubmit={handleSubmit} className="space-y-8">
 
+            {/* Basic Inputs */}
             <div className="grid md:grid-cols-2 gap-6">
               <Input name="firstName" label="First Name" onChange={handleChange} />
               <Input name="lastName" label="Last Name" onChange={handleChange} />
@@ -103,21 +129,73 @@ function SellPropertyPage() {
                   accept="image/*"
                   onChange={handleChange}
                   className="hidden"
-                  required
                 />
               </label>
             </div>
 
-            {/* Preview */}
+            {/* Image Preview with Remove */}
             {previewImages.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {previewImages.map((img, index) => (
-                  <img
+                  <div key={index} className="relative">
+                    <img
+                      src={img}
+                      alt="preview"
+                      className="h-28 w-full object-cover rounded-lg border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-2 right-2 bg-white p-1 rounded-full shadow hover:bg-red-500 hover:text-white transition"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Documents Upload */}
+            <div>
+              <label className="block text-sm text-gray-600 mb-2">
+                Upload Documents (PDF, DOC)
+              </label>
+
+              <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer hover:border-blue-600 transition bg-gray-50">
+                <FaUpload size={20} className="text-gray-400 mb-2" />
+                <span className="text-gray-500 text-sm">
+                  Click to upload documents
+                </span>
+                <input
+                  type="file"
+                  multiple
+                  name="documents"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Document List with Remove */}
+            {formData.documents.length > 0 && (
+              <div className="space-y-3">
+                {formData.documents.map((doc, index) => (
+                  <div
                     key={index}
-                    src={img}
-                    alt="preview"
-                    className="h-28 w-full object-cover rounded-lg border"
-                  />
+                    className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-lg"
+                  >
+                    <span className="text-sm text-gray-700">
+                      {doc.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeDocument(index)}
+                      className="text-gray-500 hover:text-red-500 transition"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
