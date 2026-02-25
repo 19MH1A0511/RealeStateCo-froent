@@ -5,59 +5,99 @@ import { FaPhoneAlt, FaEnvelope, FaHome } from "react-icons/fa";
 export default function Footer() {
   return (
     <footer
-      id="footer-section"   // 👈 IMPORTANT (for scrolling)
-      className="bg-gray-900 text-white pt-12 pb-6 mt-20"
+      id="footer-section"
+      className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-white pt-20 pb-8 mt-24 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
+      {/* Subtle Top Border Glow */}
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-60"></div>
 
-        {/* Company Info */}
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <FaHome className="text-blue-400 text-xl" />
-            <h2 className="text-xl font-semibold">RealEstateCo</h2>
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* Top Brand Section */}
+        <div className="text-center mb-14">
+          <div className="flex justify-center items-center gap-3 mb-4">
+            <div className="p-3 bg-blue-600/20 rounded-full backdrop-blur-sm">
+              <FaHome className="text-blue-400 text-xl" />
+            </div>
+            <h2 className="text-2xl font-semibold tracking-wide">
+              RealEstateCo
+            </h2>
           </div>
-          <p className="text-gray-400 text-sm">
-            Your trusted partner in buying, selling and renting properties.
+
+          <p className="text-gray-400 max-w-xl mx-auto text-sm leading-relaxed">
+            Helping you buy, sell, and rent properties with confidence and
+            transparency. Your trusted real estate partner.
           </p>
         </div>
 
-        {/* About */}
-        <div>
-          <h3 className="text-lg font-semibold mb-3">About Us</h3>
-          <ul className="space-y-2 text-gray-400 text-sm">
-            <li className="hover:text-white cursor-pointer">Our Story</li>
-            <li className="hover:text-white cursor-pointer">Careers</li>
-            <li className="hover:text-white cursor-pointer">Blog</li>
-          </ul>
-        </div>
+        {/* Links Section */}
+        <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
 
-        {/* Policies */}
-        <div>
-          <h3 className="text-lg font-semibold mb-3">Policies</h3>
-          <ul className="space-y-2 text-gray-400 text-sm">
-            <li className="hover:text-white cursor-pointer">Privacy Policy</li>
-            <li className="hover:text-white cursor-pointer">Terms & Conditions</li>
-            <li className="hover:text-white cursor-pointer">Support</li>
-          </ul>
-        </div>
-
-        {/* Contact Info */}
-        <div>
-          <h3 className="text-lg font-semibold mb-3">Contact</h3>
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <FaPhoneAlt className="text-blue-400" />
-            <span>+91 99630 31889</span>
+          {/* About */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 relative inline-block">
+              About
+              <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-blue-500"></span>
+            </h3>
+            <ul className="space-y-3 text-gray-400 text-sm">
+              <li className="hover:text-blue-400 transition cursor-pointer">
+                Our Story
+              </li>
+              <li className="hover:text-blue-400 transition cursor-pointer">
+                Careers
+              </li>
+              <li className="hover:text-blue-400 transition cursor-pointer">
+                Blog
+              </li>
+            </ul>
           </div>
-          <div className="flex items-center gap-2 text-gray-400 text-sm">
-            <FaEnvelope className="text-blue-400" />
-            <span>info@realestateco.com</span>
+
+          {/* Policies */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 relative inline-block">
+              Policies
+              <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-blue-500"></span>
+            </h3>
+            <ul className="space-y-3 text-gray-400 text-sm">
+              <li className="hover:text-blue-400 transition cursor-pointer">
+                Privacy Policy
+              </li>
+              <li className="hover:text-blue-400 transition cursor-pointer">
+                Terms & Conditions
+              </li>
+              <li className="hover:text-blue-400 transition cursor-pointer">
+                Support
+              </li>
+            </ul>
           </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 relative inline-block">
+              Contact
+              <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-blue-500"></span>
+            </h3>
+
+            <div className="space-y-4 text-gray-400 text-sm">
+              <div className="flex items-center justify-center md:justify-start gap-3 hover:text-blue-400 transition">
+                <FaPhoneAlt className="text-blue-400" />
+                <span>+91 99630 31889</span>
+              </div>
+
+              <div className="flex items-center justify-center md:justify-start gap-3 hover:text-blue-400 transition">
+                <FaEnvelope className="text-blue-400" />
+                <span>info@realestateco.com</span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-      </div>
+        {/* Bottom Divider */}
+        <div className="border-t border-gray-700 mt-16 pt-6 text-center text-gray-500 text-xs">
+          © 2026 RealEstateCo. All rights reserved.
+        </div>
 
-      <div className="text-center text-gray-500 text-xs mt-10">
-        © 2026 RealEstateCo. All rights reserved.
       </div>
     </footer>
   );

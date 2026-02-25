@@ -76,7 +76,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = (userData) => {
-    setUser(userData);
+    setUser(userData.data);
     setShowLogin(false);
   };
 
@@ -215,6 +215,7 @@ const Navbar = () => {
                 className="flex items-center gap-1 hover:text-blue-600 transition"
               >
                 <FaUserCircle size={24} />
+                {/* {localStorage.getItem("name") || "user"} */}
                 <RiArrowDropDownLine size={20} />
               </button>
 
