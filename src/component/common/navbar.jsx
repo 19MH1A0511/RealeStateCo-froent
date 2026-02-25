@@ -71,8 +71,6 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = (userData) => {
-    console.log("ddddddddddddddxxxxxxxxxx",userData);
-    
     setUser(userData);
     setShowLogin(false);
   };

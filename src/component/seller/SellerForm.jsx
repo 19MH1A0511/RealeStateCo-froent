@@ -1,9 +1,12 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUpload } from "react-icons/fa";
+import SellerApiService from "@/services/seller.api.service";
+import { toast } from "react-toastify";
 
-function SellPropertyPage() {
- 
+const sellerApiService = new SellerApiService();
+const SellPropertyPage = () => {
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,9 +17,23 @@ function SellPropertyPage() {
     price: "",
     description: "",
     images: [],
+    documents: [],
   });
-
   const [previewImages, setPreviewImages] = useState([]);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const errs = {};
+    if (!formData.firstName) errs.firstName = 'firstName is required';
+    if (!formData.lastName) errs.lastName = 'lastName is required';
+    if (!formData.email) errs.email = 'email is required';
+    if (!formData.phone) errs.phone = 'phone is required';
+    if (!formData.address) errs.address = 'address is required';
+    if (!formData.city) errs.city = 'city is required';
+    if (!formData.price) errs.price = 'price is required';
+    if (!formData.description) errs.description = 'description is required';
+    return errs;
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -30,10 +47,45 @@ function SellPropertyPage() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
+  const handleBlur = field => {
+    const validationErrors = validate();
+    setErrors(prev => ({ ...prev, [field]: validationErrors[field] }));
   };
+
+  const handleSubmit =async (e) => {
+    try {
+      e.preventDefault();
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      };
+      const response = await sellerApiService.createsellerproperty(formData);
+      console.log("Property created:", response);
+      if (response.success) {
+        toast.success(response.message || "Property listed successfully!");
+       handleClearForm();
+      }
+    } catch (error) {
+      console.error("Error submitting property:", error);
+    };
+  };
+
+  const handleClearForm = () => {
+    setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          address: "",
+          city: "",
+          price: "",
+          description: "",
+          images: [],
+          documents: [],
+        });
+        setPreviewImages([]);
+      };
 
   return (
     <section className="min-h-screen bg-gray-100 py-16 px-6 flex justify-center items-start">
