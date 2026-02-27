@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import LoginApiService from "@/services/login.api.service";
 import { toast, ToastContainer } from "react-toastify";
+import Loader from "@/component/utils/commons/Loading";
 
 const loginService = new LoginApiService();
 
-function LoginModal({ onClose , onLogin}) {
+function LoginModal({ onClose, onLogin }) {
   const [step, setStep] = useState(1);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     emailOrPhone: "",
@@ -25,7 +26,7 @@ function LoginModal({ onClose , onLogin}) {
     try {
       e.preventDefault();
       if (formData.name && formData.emailOrPhone) {
-
+        setLoading(true);
         const response = await loginService.registerUser({
           name: formData.name,
           email: formData.emailOrPhone,
@@ -35,28 +36,30 @@ function LoginModal({ onClose , onLogin}) {
       };
     } catch (error) {
       console.error("Error during login:", error);
-    };
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerify =async (e) => {
+  const handleVerify = async (e) => {
     try {
-    e.preventDefault();
-    if (formData.verificationCode) {
-      const response = await loginService.verifyOTP({
-      email: formData.emailOrPhone,
-      otp: formData.verificationCode});
-      // console.log("ddddddddddddddddddd",response);
-      onLogin(response.data.response);
-      
-      if(response.success) {
-        toast.success("Login successful!");
-        // onLogin(response.data)
+      e.preventDefault();
+      if (formData.verificationCode) {
+        const response = await loginService.verifyOTP({
+          email: formData.emailOrPhone,
+          otp: formData.verificationCode
+        });
+        onLogin(response.data.response);
+
+        if (response.success) {
+          toast.success("Login successful!");
+          // onLogin(response.data)
+        }
+      } else {
+        toast.error("please enter the verification code");
+        return;
       }
-    } else {
-      toast.error("please enter the verification code");
-      return;
-    }
-    onClose();
+      onClose();
     } catch (error) {
       console.error("Error during login:", error);
     };
@@ -113,7 +116,7 @@ function LoginModal({ onClose , onLogin}) {
                 type="submit"
                 className="w-full py-3 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-700 transition duration-300"
               >
-                Login
+                {loading ? <Loader /> :"Login"}
               </button>
 
             </form>
@@ -166,7 +169,7 @@ function LoginModal({ onClose , onLogin}) {
         )}
 
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }
