@@ -177,7 +177,7 @@ const SellPropertyPage = () => {
     <section className="min-h-screen bg-gray-100 py-16 px-6 flex justify-center">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-semibold text-gray-800">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold text-gray-800">
             Sell Your Property
           </h1>
         </div>

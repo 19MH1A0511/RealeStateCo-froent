@@ -92,12 +92,12 @@ const Navbar = () => {
   return (
     <>
       <nav className="w-full bg-white/70 backdrop-blur-lg shadow-lg fixed top-0 left-0 z-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center h-16">
 
           {/* Logo */}
           <div className="flex items-center gap-2">
             <Image src="/logo.png" alt="Logo" width={34} height={34} />
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <h1 className="text-xl sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               RealEstateCo
             </h1>
           </div>
@@ -120,7 +120,7 @@ const Navbar = () => {
                 {activeMenu === menu && (
                   <div className="absolute left-0 top-full pt-4">
                     <div className="absolute -top-4 left-0 w-full h-4"></div>
-                    <div className="w-[600px] bg-white shadow-2xl rounded-3xl p-8 grid grid-cols-2 gap-8 border transition-all duration-200">
+                    <div className="w-[90vw] max-w-[600px] bg-white shadow-2xl rounded-3xl p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 border">
                       <div>
                         <h3 className="font-semibold text-gray-800 mb-4 text-lg">Property Types</h3>
                         <div className="space-y-3">
@@ -153,7 +153,7 @@ const Navbar = () => {
           {/* Right Section (Desktop) */}
           <div className="hidden md:flex items-center gap-5">
             <div ref={locRef} className="relative">
-              <button onClick={() => setLocOpen(!isLocOpen)} className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition shadow-sm">
+              <button onClick={() => setLocOpen(!isLocOpen)} className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition shadow-sm">
                 <IoLocation className="text-blue-600" />
                 <span className="text-sm font-medium">{selectedLoc}</span>
                 <RiArrowDropDownLine size={20} />
@@ -204,7 +204,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden bg-white shadow-lg border-t border-gray-200 p-6 space-y-4">
+          <div className="md:hidden bg-white shadow-lg border-t border-gray-200 p-4 sm:p-6 space-y-4 max-h-[80vh] overflow-y-auto">
             {Object.keys(menuData).map((menu) => (
               <div key={menu}>
                 <p className="font-semibold mb-2">{menu}</p>
