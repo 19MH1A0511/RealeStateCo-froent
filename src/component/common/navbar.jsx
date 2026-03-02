@@ -8,6 +8,7 @@ import Link from "next/link";
 import LoginModal from "./LoginModal";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { HomePageSection } from "../common/HomePageSection";
 
 const Navbar = () => {
   const router = useRouter();
@@ -96,10 +97,12 @@ const Navbar = () => {
 
           {/* Logo */}
           <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2 cursor-pointer">
             <Image src="/logo.png" alt="Logo" width={34} height={34} />
             <h1 className="text-xl sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               RealEstateCo
             </h1>
+</Link>
           </div>
 
           {/* Desktop Menu */}
@@ -173,18 +176,21 @@ const Navbar = () => {
             {/* Profile */}
             <div ref={profileRef} className="relative">
               <button onClick={() => setProfileOpen(!isProfileOpen)} className="flex items-center gap-1 hover:text-blue-600 transition">
+                
                 <FaUserCircle size={24} />
+                {user && <span className="hidden lg:inline text-sm font-bold font-medium">{user.name}</span>}
                 <RiArrowDropDownLine size={20} />
               </button>
 
               {isProfileOpen && (
-                  <div className="absolute right-0 mt-3 w-44 bg-white shadow-xl rounded-2xl p-2 border z-50">
+                  <div className="absolute right-0 mt-3 min-w-[180px] max-w-xs bg-white shadow-xl rounded-2xl p-2 border z-50">
                     {!user ? (
                       <button onClick={() => { setShowLogin(true); setProfileOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
                     ) : (
                       <>
                         <p className="p-2 text-sm font-medium">{user.name}</p>
                         <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
+                        <button href = '#YourProperties' className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Your Prpoerties</button>
                         <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
                       </>
                     )}
@@ -224,6 +230,7 @@ const Navbar = () => {
                 <>
                   <p className="p-2 text-sm font-medium">{user.name}</p>
                   <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
+                  <button href = '#YourProperties' className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Your Prpoerties</button>
                   <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
                 </>
               )}
