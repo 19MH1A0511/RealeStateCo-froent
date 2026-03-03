@@ -49,17 +49,20 @@ function LoginModal({ onClose, onLogin }) {
           email: formData.emailOrPhone,
           otp: formData.verificationCode
         });
-        onLogin(response.data.response);
+
+        //  await onLogin(response.data.response);
 
         if (response.success) {
-          toast.success("Login successful!");
-          // onLogin(response.data)
+          toast.success(response.message);
+          // onLogin(response.data.response);
+          onLogin(response.data.response);
+          onClose();
         }
       } else {
         toast.error("please enter the verification code");
         return;
       }
-      onClose();
+
     } catch (error) {
       console.error("Error during login:", error);
     };
@@ -114,9 +117,9 @@ function LoginModal({ onClose, onLogin }) {
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-700 transition duration-300"
+                className="w-full py-3 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-700 transition duration-300 h-12 flex items-center justify-center"
               >
-                {loading ? <Loader /> :"Login"}
+                {loading ? <Loader /> : "Login"}
               </button>
 
             </form>

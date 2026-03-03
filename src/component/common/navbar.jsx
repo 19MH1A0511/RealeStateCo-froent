@@ -27,35 +27,35 @@ const Navbar = () => {
   const menuData = {
     Buy: {
       types: [
-        { name: "Apartments", link: "/buy/apartments", icon: <FaBuilding /> },
-        { name: "Villas", link: "/buy/villas", icon: <FaHome /> },
-        { name: "Plots", link: "/buy/plots", icon: <FaHome /> },
-        { name: "Commercial", link: "/buy/commercial", icon: <FaBuilding /> },
+        { name: "Apartments", link: "/project/v1/buyer", icon: <FaBuilding /> },
+        { name: "Villas", link: "/project/v1/buyer", icon: <FaHome /> },
+        { name: "Plots", link: "/project/v1/buyer", icon: <FaHome /> },
+        { name: "Commercial", link: "/project/v1/buyer", icon: <FaBuilding /> },
       ],
       features: [
-        { name: "Luxury Homes", link: "/buy/luxury", icon: <FaChartLine /> },
-        { name: "New Projects", link: "/buy/new-projects", icon: <FaChartLine /> },
+        { name: "Luxury Homes", link: "/project/v1/buyer", icon: <FaChartLine /> },
+        { name: "New Projects", link: "/project/v1/buyer", icon: <FaChartLine /> },
       ],
     },
     Rent: {
       types: [
-        { name: "Flats", link: "/rent/flats", icon: <FaBuilding /> },
-        { name: "Independent House", link: "/rent/house", icon: <FaHome /> },
-        { name: "Office Space", link: "/rent/office", icon: <FaBuilding /> },
+        { name: "Flats", link: "/project/v1/buyer", icon: <FaBuilding /> },
+        { name: "Independent House", link: "/project/v1/buyer", icon: <FaHome /> },
+        { name: "Office Space", link: "/project/v1/buyer", icon: <FaBuilding /> },
       ],
       features: [
-        { name: "Furnished", link: "/rent/furnished", icon: <FaChartLine /> },
-        { name: "Family Homes", link: "/rent/family", icon: <FaChartLine /> },
+        { name: "Furnished", link: "/project/v1/buyer", icon: <FaChartLine /> },
+        { name: "Family Homes", link: "/project/v1/buyer", icon: <FaChartLine /> },
       ],
     },
     Sell: {
       types: [
-        { name: "Post Property", link: "/sell/post", icon: <FaHome /> },
-        { name: "Agent Listings", link: "/sell/agents", icon: <FaBuilding /> },
+        { name: "Post Property", link: "/project/v1/seller", icon: <FaHome /> },
+        { name: "Agent Listings", link: "/project/v1/seller", icon: <FaBuilding /> },
       ],
       features: [
-        { name: "Free Valuation", link: "/sell/valuation", icon: <FaChartLine /> },
-        { name: "Premium Listing", link: "/sell/premium", icon: <FaChartLine /> },
+        { name: "Free Valuation", link: "/project/v1/seller", icon: <FaChartLine /> },
+        { name: "Premium Listing", link: "/project/v1/seller", icon: <FaChartLine /> },
       ],
     },
   };
@@ -69,8 +69,12 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogin = (userData) => {
+  const handleLogin = async (userData) => {
     setUser(userData);
+    setShowLogin(false);
+  };
+
+  const handleClose = () => {
     setShowLogin(false);
   };
 
@@ -178,18 +182,18 @@ const Navbar = () => {
               </button>
 
               {isProfileOpen && (
-                  <div className="absolute right-0 mt-3 w-44 bg-white shadow-xl rounded-2xl p-2 border z-50">
-                    {!user ? (
-                      <button onClick={() => { setShowLogin(true); setProfileOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
-                    ) : (
-                      <>
-                        <p className="p-2 text-sm font-medium">{user.name}</p>
-                        <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
-                        <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
-                      </>
-                    )}
-                  </div>
-                )}
+                <div className="absolute right-0 mt-3 w-44 bg-white shadow-xl rounded-2xl p-2 border z-50">
+                  {!user ? (
+                    <button onClick={() => { setShowLogin(true); setProfileOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
+                  ) : (
+                    <>
+                      <p className="p-2 text-sm font-medium">{user.name}</p>
+                      <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
+                      <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -235,7 +239,10 @@ const Navbar = () => {
 
       <div className="h-16"></div>
 
-      {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} />}
+      {showLogin && (<LoginModal
+        // onClose={handleClose}
+        onClose={() => setShowLogin(false)}
+        onLogin={handleLogin} />)}
       <ToastContainer />
     </>
   );
