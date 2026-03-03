@@ -188,10 +188,34 @@ const Navbar = () => {
                       <button onClick={() => { setShowLogin(true); setProfileOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
                     ) : (
                       <>
-                        <p className="p-2 text-sm font-medium">{user.name}</p>
-                        <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
-                        <button href = '#YourProperties' className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Your Prpoerties</button>
-                        <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
+                        <div className="w-full max-w-sm mx-auto md:max-w-md lg:max-w-lg bg-white rounded-lg p-4">
+
+                        <p className="text-center text-sm md:text-base font-medium">
+                          Profile
+                        </p>
+
+                        <p className="text-center text-xs md:text-sm text-gray-600 mb-4">
+                          {user.email || user.contactMobile} (Active)
+                        </p>
+
+                        <div className="flex flex-col gap-2">
+                          <button className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded">
+                            Your Properties
+                          </button>
+
+                          <button className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded">
+                            Settings
+                          </button>
+
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded text-red-500"
+                          >
+                            Logout
+                          </button>
+                        </div>
+
+                      </div>
                       </>
                     )}
                   </div>
