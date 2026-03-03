@@ -164,6 +164,7 @@ function LoginModal({ onClose, onLogin }) {
                 type="submit"
                 className="w-full py-3 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-700 transition duration-300"
               >
+                
                 Verify
               </button>
 
