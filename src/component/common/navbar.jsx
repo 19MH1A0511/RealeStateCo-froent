@@ -104,7 +104,7 @@ const Navbar = () => {
 
     } catch (error) {
       console.error("Error fetching your properties:", error);
-    }
+    };
   };
 
   useEffect(() => {
