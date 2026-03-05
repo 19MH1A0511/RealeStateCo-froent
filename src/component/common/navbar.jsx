@@ -71,13 +71,11 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = async (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
     setShowLogin(false);
   };
 
-  const handleClose = () => {
-    setShowLogin(false);
-  };
 
   const handleLogout = () => {
     try {
@@ -85,6 +83,7 @@ const Navbar = () => {
       localStorage.removeItem("id");
       localStorage.removeItem("email");
       localStorage.removeItem("name");
+      localStorage.removeItem("user");
       setUser(null);
       setProfileOpen(false);
       router.replace("/");
@@ -94,6 +93,27 @@ const Navbar = () => {
     }
   };
 
+  const handleYourProperties = async () => {
+    try {
+      const userId = localStorage.getItem("id");
+      if (!userId) {
+        toast.error("User ID not found. Please log in again.");
+        return;
+      };
+      router.push(`/project/v1/seller/yourproperties/${userId}`);
+
+    } catch (error) {
+      console.error("Error fetching your properties:", error);
+    }
+  };
+
+  useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+  }
+}, []);
+
   return (
     <>
       <nav className="w-full bg-white/70 backdrop-blur-lg shadow-lg fixed top-0 left-0 z-50 border-b border-gray-200">
@@ -102,11 +122,11 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2 cursor-pointer">
-            <Image src="/logo.png" alt="Logo" width={34} height={34} />
-            <h1 className="text-xl sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              RealEstateCo
-            </h1>
-</Link>
+              <Image src="/logo.png" alt="Logo" width={34} height={34} />
+              <h1 className="text-xl sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                RealEstateCo
+              </h1>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
@@ -180,21 +200,46 @@ const Navbar = () => {
             {/* Profile */}
             <div ref={profileRef} className="relative">
               <button onClick={() => setProfileOpen(!isProfileOpen)} className="flex items-center gap-1 hover:text-blue-600 transition">
-                
+
                 <FaUserCircle size={24} />
                 {user && <span className="hidden lg:inline text-sm font-bold font-medium">{user.name}</span>}
                 <RiArrowDropDownLine size={20} />
               </button>
 
               {isProfileOpen && (
-                <div className="absolute right-0 mt-3 w-44 bg-white shadow-xl rounded-2xl p-2 border z-50">
+                <div className="absolute right-0 mt-3 min-w-[180px] max-w-xs bg-white shadow-xl rounded-2xl p-2 border z-50">
                   {!user ? (
                     <button onClick={() => { setShowLogin(true); setProfileOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
                   ) : (
                     <>
-                      <p className="p-2 text-sm font-medium">{user.name}</p>
-                      <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
-                      <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
+                      <div className="w-full max-w-sm mx-auto md:max-w-md lg:max-w-lg bg-white rounded-lg p-4">
+
+                        <p className="text-center text-sm md:text-base font-medium">
+                          Profile
+                        </p>
+
+                        <p className="text-center text-xs md:text-sm text-gray-600 mb-4">
+                          {user.email || user.contactMobile} (Active)
+                        </p>
+
+                        <div className="flex flex-col gap-2">
+                          <button className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded" onClick={handleYourProperties}>
+                            Your Properties
+                          </button>
+
+                          <button className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded">
+                            Settings
+                          </button>
+
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded text-red-500"
+                          >
+                            Logout
+                          </button>
+                        </div>
+
+                      </div>
                     </>
                   )}
                 </div>
@@ -233,7 +278,7 @@ const Navbar = () => {
                 <>
                   <p className="p-2 text-sm font-medium">{user.name}</p>
                   <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
-                  <button href = '#YourProperties' className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Your Prpoerties</button>
+                  <button href='#YourProperties' className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Your Prpoerties</button>
                   <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
                 </>
               )}

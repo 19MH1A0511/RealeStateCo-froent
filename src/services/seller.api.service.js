@@ -26,7 +26,58 @@ class SellerApiService {
         try {
             const response = await axios.get(`${API_BASE_URL}project/api/v1/v.1.0.0/seller/list`, {
                 headers: {
+                     'Content-Type': 'application/json',
+                }
+            });
+            if (!response.data) {
+                throw new Error("Invalid response from server");
+            };
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching seller list:", error);
+            throw error;
+        };
+    };
+
+    async fetchSellerListByUserId(userid) {
+        try {
+            const response = await axios.get(`${API_BASE_URL}project/api/v1/v.1.0.0/seller/getsellerpropertybyuserid/${userid}`, {
+                headers: {
+                     'Content-Type': 'application/json',
+                }
+            });
+            if (!response.data) {
+                throw new Error("Invalid response from server");
+            };
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching seller list:", error);
+            throw error;
+        };
+    };
+
+    async updateSellerProperty(userData) {
+        try {
+            const response = await axios.put(`${API_BASE_URL}project/api/v1/v.1.0.0/seller/edit`, userData, {
+                headers: {
                     'Content-Type': 'multipart/form-data',
+                }
+            });
+            if (!response.data) {
+                throw new Error("Invalid response from server");
+            };
+            return response.data;
+        } catch (error) {
+            console.error("Error creating seller property:", error);
+            throw error;
+        };
+    };
+
+    async fetchSellerDataById(id) {
+        try {
+            const response = await axios.get(`${API_BASE_URL}project/api/v1/v.1.0.0/seller/getbyid/${id}`, {
+                headers: {
+                     'Content-Type': 'application/json',
                 }
             });
             if (!response.data) {

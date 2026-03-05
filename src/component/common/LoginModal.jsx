@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import LoginApiService from "@/services/login.api.service";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "@/component/utils/commons/Loading";
+import Loader from "@/component/utils/ui/commons/Loading";
 
 const loginService = new LoginApiService();
 

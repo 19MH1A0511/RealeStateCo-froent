@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from "react";
 import SellerApiService from "@/services/seller.api.service";
 import { toast } from "react-toastify";
-import {FaUpload, FaTimes } from "react-icons/fa";
-import CustomInputField from "../utils/commons/CustomInputField";
+import { FaUpload, FaTimes } from "react-icons/fa";
+import CustomInputField from "../utils/ui/commons/CustomInputField";
 
 const sellerApiService = new SellerApiService();
 
 
 
-const SellPropertyPage = () => {
+const SellPropertyPage = ({ update }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,7 +24,8 @@ const SellPropertyPage = () => {
   });
   const [previewImages, setPreviewImages] = useState([]);
   const [errors, setErrors] = useState({});
-
+  const [updateImage, setUpdateImage] = useState([]);
+  const [updateDocument, setUpdateDocument] = useState([]);
   const validate = () => {
     const errs = {};
     if (!formData.firstName) errs.firstName = 'firstName is required';
@@ -37,6 +38,25 @@ const SellPropertyPage = () => {
     if (!formData.description) errs.description = 'description is required';
     return errs;
   };
+
+  useEffect(() => {
+    setFormData({
+      id: update.id,
+      firstName: update.fristName,
+      lastName: update.lastName,
+      email: update.email,
+      phone: update.phone,
+      address: update.address,
+      city: update.city,
+      price: update?.price,
+      description: update.description,
+      images: [],
+      documents: [],
+    });
+    setUpdateImage(update.propertyImages || []);
+    setUpdateDocument(update.propertyDocuments || []);
+  }, [update]);
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -86,92 +106,64 @@ const SellPropertyPage = () => {
     setFormData({ ...formData, documents: updatedDocs });
   };
 
-  // const handleSubmit =async (e) => {
-  //   try {
-  //     e.preventDefault();
-  //     const validationErrors = validate();
-  //     if (Object.keys(validationErrors).length > 0) {
-  //       setErrors(validationErrors);
-  //       return;
-  //     };
-  //     const fileData = new FormData();
-
-  //     Object.entries(formData).forEach(([key, value]) => {
-  //       if (value instanceof Date) {
-  //         fileData.append(key, value.toISOString().split('T')[0]);
-  //       } else if (Array.isArray(value) || typeof value === 'object') {
-  //         fileData.append(key, JSON.stringify(value));
-  //       } else if (value !== null && value !== '') {
-  //         fileData.append(key, value);
-  //       }
-  //     });
-
-  //     const response = await sellerApiService.createsellerproperty(formData);
-  //     console.log("Property created:", response);
-  //     if (response.success) {
-  //       toast.success(response.message || "Property listed successfully!");
-  //      handleClearForm();
-  //     };
-  //   } catch (error) {
-  //     console.error("Error submitting property:", error);
-  //   };
-  // };
-
   const handleSubmit = async (e) => {
-  try {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+    try {
+      e.preventDefault();
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+      const fileData = new FormData();
+      // ✅ Append normal fields
+      fileData.append("firstName", formData.firstName);
+      fileData.append("lastName", formData.lastName);
+      fileData.append("userId", localStorage.getItem("id"));
+      fileData.append("email", formData.email);
+      fileData.append("phone", formData.phone);
+      fileData.append("address", formData.address);
+      fileData.append("city", formData.city);
+      fileData.append("price", formData.price);
+      fileData.append("description", formData.description);
+      // ✅ Append images properly
+      formData.images.forEach((image) => {
+        fileData.append("images", image);
+      });
+      // ✅ Append documents properly
+      formData.documents.forEach((doc) => {
+        fileData.append("documents", doc);
+      });
+      // ✅ IMPORTANT: Send FormData
+      let response
+      if (update) {
+        response = await sellerApiService.updateSellerProperty(fileData);
+      } else {
+        response = await sellerApiService.createsellerproperty(fileData);
+      };
+      if (response.success) {
+        toast.success(response.message || "Property listed successfully!");
+        handleClearForm();
+      };
+    } catch (error) {
+      console.error("Error submitting property:", error);
+      toast.error("Something went wrong");
     }
-    const fileData = new FormData();
-    // ✅ Append normal fields
-    fileData.append("firstName", formData.firstName);
-    fileData.append("lastName", formData.lastName);
-    fileData.append("userId", localStorage.getItem("id")); 
-    fileData.append("email", formData.email);
-    fileData.append("phone", formData.phone);
-    fileData.append("address", formData.address);
-    fileData.append("city", formData.city);
-    fileData.append("price", formData.price);
-    fileData.append("description", formData.description);
-    // ✅ Append images properly
-    formData.images.forEach((image) => {
-      fileData.append("images", image);
-    });
-    // ✅ Append documents properly
-    formData.documents.forEach((doc) => {
-      fileData.append("documents", doc);
-    });
-    // ✅ IMPORTANT: Send FormData
-    const response = await sellerApiService.createsellerproperty(fileData);
-    if (response.success) {
-      toast.success(response.message || "Property listed successfully!");
-      handleClearForm();
-    };
-  } catch (error) {
-    console.error("Error submitting property:", error);
-    toast.error("Something went wrong");
-  }
-};
+  };
 
 
   const handleClearForm = () => {
     setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          address: "",
-          city: "",
-          price: "",
-          description: "",
-          images: [],
-          documents: [],
-        });
-        setPreviewImages([]);
-      };
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      price: "",
+      description: "",
+    });
+    setPreviewImages([]);
+  };
 
   return (
     <section className="min-h-screen bg-gray-100 py-16 px-6 flex justify-center">
@@ -187,20 +179,20 @@ const SellPropertyPage = () => {
 
             {/* Basic CustomInputFields */}
             <div className="grid md:grid-cols-2 gap-6">
-              <CustomInputField name="firstName" label="First Name" onChange={handleChange} />
-              <CustomInputField name="lastName" label="Last Name" onChange={handleChange} />
+              <CustomInputField name="firstName" label="First Name" value={formData.firstName} onBlur={() => handleBlur('firstName')} onChange={handleChange} />
+              <CustomInputField name="lastName" label="Last Name" value={formData.lastName} onBlur={() => handleBlur('lastName')} onChange={handleChange} />
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <CustomInputField name="email" type="email" label="Email Address" onChange={handleChange} />
-              <CustomInputField name="phone" label="Phone Number" onChange={handleChange} />
+              <CustomInputField name="email" type="email" label="Email Address" value={formData.email} onBlur={() => handleBlur('email')} onChange={handleChange} />
+              <CustomInputField name="phone" label="Phone Number" value={formData.phone} onBlur={() => handleBlur('phone')} onChange={handleChange} />
             </div>
 
-            <CustomInputField name="address" label="Property Address" onChange={handleChange} />
+            <CustomInputField name="address" label="Property Address" value={formData.address} onBlur={() => handleBlur('address')} onChange={handleChange} />
 
             <div className="grid md:grid-cols-2 gap-6">
-              <CustomInputField name="city" label="City" onChange={handleChange} />
-              <CustomInputField name="price" type="number" label="Property Price ($)" onChange={handleChange} />
+              <CustomInputField name="city" label="City" value={formData.city} onBlur={() => handleBlur('city')} onChange={handleChange} />
+              <CustomInputField name="price" type="number" label="Property Price ($)" value={formData.price} onBlur={() => handleBlur('price')} onChange={handleChange} />
             </div>
 
             {/* Description */}
@@ -261,6 +253,23 @@ const SellPropertyPage = () => {
               </div>
             )}
 
+            {updateImage.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Existing Images:</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {updateImage.map((img, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={img.path}
+                        alt={`existing-${index}`}
+                        className="h-28 w-full object-cover rounded-lg border"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Documents Upload */}
             <div>
               <label className="block text-sm text-gray-600 mb-2">
@@ -306,14 +315,31 @@ const SellPropertyPage = () => {
               </div>
             )}
 
+            {updateDocument.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Existing Documents:</h3>
+                <div className="space-y-3">
+                  {updateDocument.map((doc, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-lg"
+                    >
+                      <a href={doc.path} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                        {doc.filename}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Submit */}
             <button
               type="submit"
               className="w-full py-4 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
             >
-              Submit Property
+              {update ? "Update Property" : "Submit Property"}
             </button>
-
           </form>
         </div>
       </div>
