@@ -26,6 +26,16 @@ const Navbar = () => {
   const locations = ["Hyderabad", "Mumbai", "Bangalore", "Chennai", "Pune"];
 
   const menuData = {
+    Sell: {
+      types: [
+        { name: "Post Property", link: "/sell/post", icon: <FaHome /> },
+        { name: "Agent Listings", link: "/sell/agents", icon: <FaBuilding /> },
+      ],
+      features: [
+        { name: "Free Valuation", link: "/sell/valuation", icon: <FaChartLine /> },
+        { name: "Premium Listing", link: "/sell/premium", icon: <FaChartLine /> },
+      ],
+    },
     Buy: {
       types: [
         { name: "Apartments", link: "/buy/apartments", icon: <FaBuilding /> },
@@ -49,16 +59,36 @@ const Navbar = () => {
         { name: "Family Homes", link: "/rent/family", icon: <FaChartLine /> },
       ],
     },
-    Sell: {
-      types: [
-        { name: "Post Property", link: "/sell/post", icon: <FaHome /> },
-        { name: "Agent Listings", link: "/sell/agents", icon: <FaBuilding /> },
-      ],
-      features: [
-        { name: "Free Valuation", link: "/sell/valuation", icon: <FaChartLine /> },
-        { name: "Premium Listing", link: "/sell/premium", icon: <FaChartLine /> },
-      ],
-    },
+    Interiors: {
+    types: [
+      { name: "Home Decor", link: "/interiors/home-decor", icon: <FaBuilding /> },
+      { name: "Furniture", link: "/interiors/furniture", icon: <FaHome /> },
+    ],
+    features: [
+      { name: "Designer Rooms", link: "/interiors/designer-rooms", icon: <FaChartLine /> },
+      { name: "Custom Interiors", link: "/interiors/custom", icon: <FaChartLine /> },
+    ],
+  },
+  Construction: {
+    types: [
+      { name: "Residential", link: "/construction/residential", icon: <FaBuilding /> },
+      { name: "Commercial", link: "/construction/commercial", icon: <FaHome /> },
+    ],
+    features: [
+      { name: "New Projects", link: "/construction/new-projects", icon: <FaChartLine /> },
+      { name: "Renovation", link: "/construction/renovation", icon: <FaChartLine /> },
+    ],
+  },
+  Inspection: {
+    types: [
+      { name: "Home Inspection", link: "/inspection/home", icon: <FaHome /> },
+      { name: "Commercial Inspection", link: "/inspection/commercial", icon: <FaBuilding /> },
+    ],
+    features: [
+      { name: "Report Services", link: "/inspection/report", icon: <FaChartLine /> },
+      { name: "Expert Advice", link: "/inspection/advice", icon: <FaChartLine /> },
+    ],
+  },
   };
 
   useEffect(() => {
@@ -252,10 +282,11 @@ const Navbar = () => {
                 <button onClick={() => { setShowLogin(true); setIsOpen(false); }} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Login</button>
               ) : (
                 <>
-                  <p className="p-2 text-sm font-medium">{user.name}</p>
-                  <p className="p-2 text-sm font-medium">{user.email || user.contactMobile}</p>
-                  <button href = '#YourProperties' className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Your Prpoerties</button>
-                  <button onClick={handleLogout} className="block w-full text-left p-2 text-sm hover:bg-gray-100 rounded">Logout</button>
+                  <p className="text-center text-sm md:text-base font-medium">profile</p>
+                  <p className="text-center text-xs md:text-sm text-gray-600 mb-4">{user.email || user.contactMobile} (Active)</p>
+                  <button href = '#YourProperties' className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded text-red-500">Your Prpoerties</button>
+                  <button className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded">Settings</button>
+                  <button onClick={handleLogout} className="w-full text-center p-2 text-sm md:text-base hover:bg-gray-100 rounded text-red-500">Logout</button>
                 </>
               )}
             </div>

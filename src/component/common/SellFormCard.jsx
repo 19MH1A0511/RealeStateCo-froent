@@ -9,8 +9,10 @@ function SellFormCard({ onClose }) {
     firstName: "",
     lastName: "",
     phone: "",
+    aadhar: "",
     email: "",
     address: "",
+    pinCode: "",
     location: "",
     cost: "",
     documents: null,
@@ -82,12 +84,27 @@ function SellFormCard({ onClose }) {
             <Input name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" />
             <Input name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" />
           </div>
+            <Input
+              name="aadhar"
+              value={formData.aadhar}
+              onChange={handleChange}
+              placeholder="Enter Your Aadhaar Number"
+              full
+            />
 
           <Input
             name="address"
             value={formData.address}
             onChange={handleChange}
             placeholder="Property Address"
+            full
+          />
+          {/* Pin Code */}
+          <Input
+            name="pinCode"
+            value={formData.pinCode}
+            onChange={handleChange}
+            placeholder="Pin Code"
             full
           />
 
